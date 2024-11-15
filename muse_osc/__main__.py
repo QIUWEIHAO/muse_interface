@@ -112,10 +112,10 @@ def _stream_handler():
                             # oscclient.send_message(f"/{muse_name}/eeg", sample)
                             # Broken out per EEG element
                             for channel_idx, channel in enumerate([
-                                    f"/{muse_name}/eeg-tp9",
-                                    f"/{muse_name}/eeg-af7",
-                                    f"/{muse_name}/eeg-af8",
-                                    f"/{muse_name}/eeg-tp10",
+                                    f"/{muse_name}/eeg-tp9-le",
+                                    f"/{muse_name}/eeg-af7-lf",
+                                    f"/{muse_name}/eeg-af8-rf",
+                                    f"/{muse_name}/eeg-tp10-re",
                                     f"/{muse_name}/eeg-aux",
                                 ]):                                
                                 oscclient.send_message(channel, sample[channel_idx])
@@ -143,7 +143,7 @@ def _stream_handler():
                                 hz_10_counter = round(ts[0],1) - int(ts[0])
 
                                 for band in BANDS:
-                                    channel = f"/{muse_name}/elements/{band}_absolute"
+                                    channel = f"/{muse_name}/{band}_absolute"
                                     powers = []
                                     oscclient.send_message(channel,
                                             streamer.band_calculator.get_band_power(band, elements="ALL")
