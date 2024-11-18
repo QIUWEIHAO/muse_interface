@@ -70,7 +70,7 @@ class LslToOscStreamer:
                     # print(stream.source_id() , stream_type)
                     if stream_type == 'ACC': stream_type = 'accelerometer'
                     if stream_type == 'GYRO': stream_type = 'gyroscope'
-                    if stream_type in ['EEG', 'PPG', 'accelerometer', 'gyroscope']:
+                    if stream_type in ['EEG', 'PPG', 'accelerometer', 'gyroscope'] and self.inlets[stream_type] == None:
                         self.inlets[stream_type] = StreamInlet(stream, max_chunklen=12)
                 # else:
                     # print(muse_name + "not equals " +self.device_name)
@@ -175,10 +175,17 @@ if __name__ == "__main__":
         # print(muse_name, port + idx)
         streamers.append(streamer)
     
-    streams = resolve_stream()    
-    for streamer in streamers:
-        streamer.connect(streams)
 
+    from threading import Timer
+
+    def connect_all_streams():
+        streams = resolve_stream()    
+        for streamer in streamers:
+            streamer.connect(streams)        
+        Timer(5, connect_all_streams).start()  # 再次启动定时器
+
+    connect_all_streams()  # 第一次调用    
+    
     streaming_thread = Thread(target=_stream_handler)
     streaming_thread.daemon = True
     streaming_thread.start()    
