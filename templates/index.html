@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muse Monitor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .body{
+            background-color: #dbdbdb;
+        }
+        .circle {
+            margin-top: 10px;
+            width: 12px;
+            height: 20px;
+            border-radius: 40%;
+        }
+        .circle.grey {
+            background-color: lightgray;
+        }
+        .circle.green {
+            background-color: #71F338;
+        }
+        .middle {
+            margin-top: -10px;
+        }
+        .muse-section {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .muse-section.off {
+            background-color: grey;
+        }
+        .muse-section.on {
+            background-color: white;
+        }
+        .indicator-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .indicators.hidden {
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body style="background: #ebebeb;">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4">
+                <h3>Master Controls</h3>
+                <button onclick="sendCommand('/mastercontrol/play')">Play</button>
+                <button onclick="sendCommand('/mastercontrol/stop')">Stop</button>
+                <input type="checkbox" onchange="sendCommand('/mastercontrol/kinect', this.checked ? 1 : 0)">
+            </div>
+            <div class="col-md-8">
+                <h3>Muse Status</h3>
+                <div id="muse-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script>
+        const socket = io();
+
+        // Fetch and render muse data
+        async function fetchMuseData() {
+            try {
+                const response = await fetch('/muse-data');
+                const data = await response.json();
+                // renderMuseData(data);
+            } catch (error) {
+                console.error('Error fetching muse data:', error);
+            }
+        }
+
+        // Render muse data dynamically
+        function renderMuseData(museData) {
+            const container = document.getElementById('muse-container');
+            container.innerHTML = ''; // Clear the container
+
+            for (const [name, details] of Object.entries(museData)) {
+                const statusClass = details.status === 'on' ? 'on' : 'off';
+                const indicatorsClass = details.status === 'on' ? '' : 'hidden';
+                const indicators = details.signalquality
+                    .map((value, index) => 
+                        `<div class="circle ${value ? 'green' : 'grey'} ${index === 1 || index === 2 ? 'middle' : ''}"></div>`
+                    )
+                    .join('');
+                container.innerHTML += `
+                    <div class="muse-section ${statusClass}">
+                        <div><strong>${name}</strong></div>
+                        <div class="indicator-wrapper indicators ${indicatorsClass}">
+                            ${indicators}
+                        </div>
+                    </div>`;
+            }
+        }
+
+        // Listen for real-time updates
+        socket.on('muse_data_update', (data) => {
+            // console.log('Received muse data update:', data);
+            renderMuseData(data);
+        });
+
+        // Initial fetch when the page loads
+        // document.addEventListener('DOMContentLoaded', fetchMuseData);
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchMuseData(); // Fetch immediately on page load
+            setInterval(fetchMuseData, 500); // Run every second
+        });
+    </script>
+</body>
+</html>
