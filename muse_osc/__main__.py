@@ -193,8 +193,8 @@ if __name__ == "__main__":
     print(f"Start streaming data for {stream_time_sec} seconds")
     for streamer in streamers:
         streamer.stream_data()
-    sleep(stream_time_sec)
+    # sleep(stream_time_sec)
     
-    for streamer in streamers:
-        streamer.close_stream()
-    print("Stopped streaming. Exiting program...")
+    # for streamer in streamers:
+    #     streamer.close_stream()
+    # print("Stopped streaming. Exiting program...")
