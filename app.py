@@ -15,13 +15,13 @@ osc_client = udp_client.SimpleUDPClient("127.0.0.1", 5005)
 
 # Example muse device data
 muse_data = {
-    "Muse-0530": {"status": "off", "signalquality": [0, 0, 0, 1]},
-    "Muse-00AC": {"status": "off", "signalquality": [0, 0, 0, 1]},
-    "Muse-EB8D": {"status": "off", "signalquality": [1, 1, 1, 1]},
-    "Muse-EFCD": {"status": "off", "signalquality": [1, 1, 1, 1]},
-    "Muse-00AD": {"status": "off", "signalquality": [1, 1, 1, 1]},
-    "Muse-079C": {"status": "off", "signalquality": [1, 1, 1, 1]},
-    "Muse-XXXX": {"status": "off", "signalquality": [1, 1, 1, 1]}
+    "Muse-0530": {"status": "off", "signalquality": [0, 0, 0, 0]},
+    "Muse-00AC": {"status": "off", "signalquality": [0, 0, 0, 0]},
+    "Muse-EB8D": {"status": "off", "signalquality": [0, 0, 0, 0]},
+    "Muse-EFCD": {"status": "off", "signalquality": [0, 0, 0, 0]},
+    "Muse-00AD": {"status": "off", "signalquality": [0, 0, 0, 0]},
+    "Muse-079C": {"status": "off", "signalquality": [0, 0, 0, 0]},
+    "Muse-DD90": {"status": "off", "signalquality": [0, 0, 0, 0]}
     # Add other muse devices here
 }
 

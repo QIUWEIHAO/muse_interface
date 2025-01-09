@@ -5,22 +5,10 @@ import os
 from collections import deque
 
 
-
-muse_names = [
-    '143648F2-D9AD-77CC-5E6D-4C6185E433A9',#: 'Muse-00AC', # BLEAK source id
-    '6CAEA77C-CFB5-8297-B709-419565E920D1',#: 'Muse-0530', # BLEAK source id
-    'FCC7CA7F-9A94-727A-621C-09620A24A809',#: 'Muse-EFCD',
-    # 'A6F24BE5-6134-D1E5-2A8D-96F242EC5448',#: 'Muse-EB8D',
-    'AAAD869F-7E03-A2DA-5BC5-05D1CFAB4373',#: 'Muse-00AD',
-    # '68F92D62-07FF-DC68-09E6-ED2A18DD5EAB',#: 'Muse-079C',
-    # 'XxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxX7',# xxx7
-    # 'XxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxX8',# xxx8
-]
-
 # List of Muse device names
 muse_names = [
     "Muse-EFCD", "Muse-00AC", "Muse-0530", "Muse-EB8D",
-    "Muse-00AD", "Muse-079C", "xxx7", "xxx8"
+    "Muse-00AD", "Muse-079C", "Muse-DD90"
 ]
 
 
