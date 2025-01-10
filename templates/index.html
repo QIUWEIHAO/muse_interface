@@ -60,7 +60,71 @@
             </div>
             <div class="col-md-8">
                 <h3>Muse Status</h3>
-                <div id="muse-container"></div>
+                <div id="muse-container">
+                    <div id="muse01" class="muse-section off">
+                        <div><strong>Muse 01</strong></div>
+                        <div class="indicator-wrapper indicators hidden">
+                            <div class="circle grey"></div>
+                            <div class="circle grey middle"></div>
+                            <div class="circle grey middle"></div>
+                            <div class="circle grey"></div>
+                        </div>
+                    </div>
+                    <div id="muse02" class="muse-section off">
+                        <div><strong>Muse 02</strong></div>
+                        <div class="indicator-wrapper indicators hidden">
+                            <div class="circle grey"></div>
+                            <div class="circle grey middle"></div>
+                            <div class="circle grey middle"></div>
+                            <div class="circle grey"></div>
+                        </div>
+                    </div>
+                    <div id="muse03" class="muse-section off">
+                        <div><strong>Muse 03</strong></div>
+                        <div class="indicator-wrapper indicators hidden">
+                            <div class="circle grey"></div>
+                            <div class="circle grey middle"></div>
+                            <div class="circle grey middle"></div>
+                            <div class="circle grey"></div>
+                        </div>
+                    </div>
+                    <div id="muse04" class="muse-section off">
+                        <div><strong>Muse 04</strong></div>
+                        <div class="indicator-wrapper indicators hidden">
+                            <div class="circle grey"></div>
+                            <div class="circle grey middle"></div>
+                            <div class="circle grey middle"></div>
+                            <div class="circle grey"></div>
+                        </div>
+                    </div>
+                    <div id="muse05" class="muse-section off">
+                        <div><strong>Muse 05</strong></div>
+                        <div class="indicator-wrapper indicators hidden">
+                            <div class="circle grey"></div>
+                            <div class="circle grey middle"></div>
+                            <div class="circle grey middle"></div>
+                            <div class="circle grey"></div>
+                        </div>
+                    </div>
+                    <div id="muse06" class="muse-section off">
+                        <div><strong>Muse 06</strong></div>
+                        <div class="indicator-wrapper indicators hidden">
+                            <div class="circle grey"></div>
+                            <div class="circle grey middle"></div>
+                            <div class="circle grey middle"></div>
+                            <div class="circle grey"></div>
+                        </div>
+                    </div>
+                    <div id="muse07" class="muse-section off">
+                        <div><strong>Muse 07</strong></div>
+                        <div class="indicator-wrapper indicators hidden">
+                            <div class="circle grey"></div>
+                            <div class="circle grey middle"></div>
+                            <div class="circle grey middle"></div>
+                            <div class="circle grey"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -82,24 +146,27 @@
 
         // Render muse data dynamically
         function renderMuseData(museData) {
-            const container = document.getElementById('muse-container');
-            container.innerHTML = ''; // Clear the container
-
             for (const [name, details] of Object.entries(museData)) {
+                const section = document.getElementById(name); // Select the specific Muse section
+                if (!section) continue; // Skip if the section doesn't exist in HTML
+
+                // Update status class
                 const statusClass = details.status === 'on' ? 'on' : 'off';
-                const indicatorsClass = details.status === 'on' ? '' : 'hidden';
-                const indicators = details.signalquality
-                    .map((value, index) => 
-                        `<div class="circle ${value ? 'green' : 'grey'} ${index === 1 || index === 2 ? 'middle' : ''}"></div>`
-                    )
-                    .join('');
-                container.innerHTML += `
-                    <div class="muse-section ${statusClass}">
-                        <div><strong>${name}</strong></div>
-                        <div class="indicator-wrapper indicators ${indicatorsClass}">
-                            ${indicators}
-                        </div>
-                    </div>`;
+                section.className = `muse-section ${statusClass}`;
+
+                // Update indicators visibility
+                const indicatorsWrapper = section.querySelector('.indicator-wrapper');
+                if (details.status === 'on') {
+                    indicatorsWrapper.classList.remove('hidden');
+                } else {
+                    indicatorsWrapper.classList.add('hidden');
+                }
+
+                // Update signal quality indicators
+                const indicators = indicatorsWrapper.querySelectorAll('.circle');
+                details.signalquality.forEach((value, index) => {
+                    indicators[index].className = `circle ${value ? 'green' : 'grey'} ${index === 1 || index === 2 ? 'middle' : ''}`;
+                });
             }
         }
 

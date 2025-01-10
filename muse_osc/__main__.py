@@ -173,7 +173,7 @@ if __name__ == "__main__":
 
     print(f"Initializing connection to {args.host}:{args.port} - forwarding LSL streams: {args.lsl_streams}")
     streamers = []
-    for idx, muse_name in enumerate(muse_names[0:6]):
+    for idx, muse_name in enumerate(muse_names[0:7]):
         streamer = LslToOscStreamer(muse_name, compute_bands=True)
         # print(muse_name, port + idx)
         streamers.append(streamer)

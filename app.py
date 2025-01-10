@@ -15,13 +15,13 @@ osc_client = udp_client.SimpleUDPClient("127.0.0.1", 5005)
 
 # Example muse device data
 muse_data = {
-    "Muse-0530": {"status": "off", "signalquality": [0, 0, 0, 0]},
-    "Muse-00AC": {"status": "off", "signalquality": [0, 0, 0, 0]},
-    "Muse-EB8D": {"status": "off", "signalquality": [0, 0, 0, 0]},
-    "Muse-EFCD": {"status": "off", "signalquality": [0, 0, 0, 0]},
-    "Muse-00AD": {"status": "off", "signalquality": [0, 0, 0, 0]},
-    "Muse-079C": {"status": "off", "signalquality": [0, 0, 0, 0]},
-    "Muse-DD90": {"status": "off", "signalquality": [0, 0, 0, 0]}
+    "muse01": {"status": "off", "signalquality": [0, 0, 0, 0]},
+    "muse02": {"status": "off", "signalquality": [0, 0, 0, 0]},
+    "muse03": {"status": "off", "signalquality": [0, 0, 0, 0]},
+    "muse04": {"status": "off", "signalquality": [0, 0, 0, 0]},
+    "muse05": {"status": "off", "signalquality": [0, 0, 0, 0]},
+    "muse06": {"status": "off", "signalquality": [0, 0, 0, 0]},
+    "muse07": {"status": "off", "signalquality": [0, 0, 0, 0]}
     # Add other muse devices here
 }
 
@@ -52,9 +52,8 @@ def osc_listener():
     dispatcher = Dispatcher()
 
     # Map OSC addresses to functions
-    dispatcher.map("/Muse-*/eeg-*", update_signal_quality)  # Matches EEG signal paths
-    dispatcher.map("/*", print_osc_message)  # Fallback for debugging other OSC messages
-
+    dispatcher.map("/muse*/*", update_signal_quality)  # Matches EEG signal paths    
+    
     # Create and start the OSC server
     server = AsyncIOOSCUDPServer(("localhost", PORT), dispatcher, loop)
     print(f"Listening for OSC messages on localhost:{PORT}")
@@ -66,32 +65,33 @@ def update_signal_quality(address, *args):
     """Update signal quality in the muse_data dictionary."""
     # Extract device name and signal type from the OSC address
     parts = address.split('/')
+    # print(parts)
     device_name = parts[1]  # E.g., "Muse-00AC"
     signal_type = parts[2]  # E.g., "eeg-tp9-le"
 
     # Map signal types to indices
     signal_mapping = {
-        "eeg-tp9-le": 0,
-        "eeg-af7-lf": 1,
-        "eeg-af8-rf": 2,
-        "eeg-tp10-re": 3,
+        "eeg-tp9-le-dataquality": 0,
+        "eeg-af7-lf-dataquality": 1,
+        "eeg-af8-rf-dataquality": 2,
+        "eeg-tp10-re-dataquality": 3,
     }
 
     # Update signal quality if device is in muse_data
-    if device_name in muse_data and signal_type in signal_mapping:
-        index = signal_mapping[signal_type]
-        # Use the first value from args to determine signal quality (1.0 -> 1, 0.0 -> 0)
+    if device_name in muse_data:
         with data_lock:
-            muse_data[device_name]["status"] = 'on'
-            muse_data[device_name]["signalquality"][index] = int(args[0] > 0)
+            if signal_type  == "onoff": 
+                muse_data[device_name]["status"] = 'on' if args[0] > 0 else 'off'
+            elif signal_type in signal_mapping:
+                index = signal_mapping[signal_type]     
+                muse_data[device_name]["signalquality"][index] = int(args[0] > 0)
+        # Check how fast the messages are being send
+        # if index ==0:
+        #     print(device_name)
 
-            # Emit updated muse_data to all clients
-            # socketio.emit('muse_data_update', muse_data)
-
-def print_osc_message(address, *args):
-    """Print received OSC messages."""
-    # print(f"Received OSC message: Address: {address}, Arguments: {args}")
-    return
+    # Emit updated muse_data to all clients
+    # print(muse_data )
+    # socketio.emit('muse_data_update', muse_data)
 
 @app.route('/')
 def index():
