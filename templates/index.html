@@ -53,16 +53,21 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-4">
-                <h3>Master Controls</h3>
-                <button onclick="sendCommand('/param/rockSetup', 1)">Rock Setup</button>
-                <button onclick="sendCommand('/param/intromode', 1)">Intro Mode</button>
-                <button onclick="sendCommand('/param/playmode', 1)">Play</button>
-                <button onclick="sendCommand('/param/playmode', 0)">Stop</button>
-                
+                <div class="row mb-3">
+                    <h3>播放控制 | Playback Controls</h3>
+                </div>
+                <div class="col-md-8 d-flex flex-column">
+                <button class = "btn-light btn btn-outline-primary btn-lg mb-3" onclick="sendCommand('/param/rockSetup', 1)">石頭佈局 | Rock</button>
+                <button class = "btn-light btn btn-outline-primary btn-lg mb-3" onclick="sendCommand('/param/intromode', 1)">初始場景 | Intro</button>
+                <button class = "btn-light btn btn-outline-primary btn-lg mb-3" onclick="sendCommand('/param/playmode', 1)">正式開始 | Play</button>
+                <button class = "btn-light btn btn-outline-primary btn-lg mb-3" onclick="sendCommand('/param/playmode', 0)">暫停 | Pause</button>
+                </div>
                 <!-- <input type="checkbox" onchange="sendCommand('/mastercontrol/kinect', this.checked ? 1 : 0)"> -->
             </div>
             <div class="col-md-8">
-                <h3>Muse Status</h3>
+                <div class="row mb-3">
+                    <h3>腦波儀狀態 | Muse Status</h3>
+                </div>
                 <div id="muse-container">
                     <div id="muse01" class="muse-section off">
                         <div><strong>Muse 01</strong></div>
