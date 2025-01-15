@@ -11,7 +11,7 @@ app = Flask(__name__)
 socketio = SocketIO(app)
 
 # OSC Client for sending control commands
-osc_client = udp_client.SimpleUDPClient("127.0.0.1", 5005)
+osc_client = udp_client.SimpleUDPClient("127.0.0.1", 10000)
 
 # Example muse device data
 muse_data = {
@@ -91,7 +91,7 @@ def update_signal_quality(address, *args):
 
     # Emit updated muse_data to all clients
     # print(muse_data )
-    # socketio.emit('muse_data_update', muse_data)
+    socketio.emit('muse_data_update', muse_data)
 
 @app.route('/')
 def index():
@@ -99,19 +99,16 @@ def index():
     return render_template("index.html", muse_data = muse_data)
 
 @socketio.on('send_command')
-def handle_command(data):
+def handle_command(address, value):
     """Handle button/toggle events."""
-    print("Received data:", data)  # Debugging
-    command = data.get("command")
-    value = data.get("value", None)
-    print("Parsed command:", command, "Value:", value)  # Debugging
+    print(f"Received address: {address} | value {value}")  # Debugging
 
     if value is not None:
-        osc_client.send_message(command, value)
-        print(f"OSC Sent -> Command: {command}, Value: {value}")
+        osc_client.send_message(address, value)
+        print(f"OSC Sent -> Command: {address}, Value: {value}")
     else:
-        osc_client.send_message(command, [])
-        print(f"OSC Sent -> Command: {command}")
+        osc_client.send_message(address, [])
+        print(f"OSC Sent -> Command: {address}")
 
     emit("command_sent", {"status": "success"}, broadcast=True)
 

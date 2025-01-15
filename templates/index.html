@@ -54,9 +54,12 @@
         <div class="row">
             <div class="col-md-4">
                 <h3>Master Controls</h3>
-                <button onclick="sendCommand('/mastercontrol/play')">Play</button>
-                <button onclick="sendCommand('/mastercontrol/stop')">Stop</button>
-                <input type="checkbox" onchange="sendCommand('/mastercontrol/kinect', this.checked ? 1 : 0)">
+                <button onclick="sendCommand('/param/rockSetup', 1)">Rock Setup</button>
+                <button onclick="sendCommand('/param/intromode', 1)">Intro Mode</button>
+                <button onclick="sendCommand('/param/playmode', 1)">Play</button>
+                <button onclick="sendCommand('/param/playmode', 0)">Stop</button>
+                
+                <!-- <input type="checkbox" onchange="sendCommand('/mastercontrol/kinect', this.checked ? 1 : 0)"> -->
             </div>
             <div class="col-md-8">
                 <h3>Muse Status</h3>
@@ -170,6 +173,11 @@
             }
         }
 
+        function sendCommand(address, value){
+            socket.emit('send_command', address, value );
+            
+        }
+
         // Listen for real-time updates
         socket.on('muse_data_update', (data) => {
             // console.log('Received muse data update:', data);
@@ -180,7 +188,7 @@
         // document.addEventListener('DOMContentLoaded', fetchMuseData);
         document.addEventListener('DOMContentLoaded', () => {
             fetchMuseData(); // Fetch immediately on page load
-            setInterval(fetchMuseData, 999); // Run every second
+            // setInterval(fetchMuseData, 999); // Run every second
         });
     </script>
 </body>
